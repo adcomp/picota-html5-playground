@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+  <title>Picota - Editor</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/remote.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+<div id="main" class="main-remote">
+
+<header class="main-header">
+  <div class="header-left">
+    <h1 class="logo"><a href=""></a></h1>
+
+    <nav id="nav-mode">
+      <ul class="menu">
+        <li name="mode"><span id="mode">Editor</span>
+          <ul class="select-mode">
+            <li name="editor">Editor</li>
+            <li name="canvas">Canvas</li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+    <nav id="nav-editor">
+      <ul class="menu">
+        <li name="html" class="active">HTML</li>
+        <li name="css">CSS</li>
+        <li name="js">JS</li>
+        <li name="refresh"><img src="images/refresh.png"></li>
+        <li name="preview"><img src="images/preview.png"></li>
+        <li name="connect"><img src="images/network.png"></li>
+      </ul>
+    </nav>
+    <nav id="nav-canvas">
+      <ul class="menu">
+        <li><input id="canvas-color" type="color" value="#000000"></li>
+        <li>Size
+          <ul>
+            <li>
+              <input id="canvas-lineWidth" type="range" min="1" max="32" value="1">
+            </li>
+          </ul>
+        </li>
+
+        <li id="canvas-clear" name="clear">Clear</li>
+      </ul>
+    </nav>
+  </div>
+
+</header>
+
+<div id="connect-box">
+  <span id="status"></span>
+  <label for="host">Host</label><input type="text" id="host" value="127.0.0.1">
+  <input type="button" id="connect" value="log in">
+</div>
+
+<div id="editor">
+  <div id="code_html" class="code"></div>
+  <div id="code_css" class="code"></div>
+  <div id="code_js" class="code"></div>
+</div>
+
+<div id="preview"><iframe id="mainframe"></iframe></div>
+
+<canvas id="canvasframe"></canvas>
+
+</div><!-- main -->
+
+<footer class="main-footer">ADcomp</footer>
+
+</body>
+</html>
+
