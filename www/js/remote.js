@@ -3,8 +3,8 @@ var width = 0, height = 0, preview = false, mode = "editor";
 var mouse = 0;
 
 var canvas = {
-  width: 800,
-  height: 600,
+  width: 2000,
+  height: 2000,
   ctx: null,
 
   init: function() {
@@ -12,6 +12,7 @@ var canvas = {
     this.ctx.canvas.width = this.width;
     this.ctx.canvas.height = this.height;
     this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = "round";
     this.setColor('black');
   },
   clear: function() {
@@ -23,12 +24,12 @@ var canvas = {
     send({"canvas": ["beginPath", ""]});
   },
   lineTo: function(pos) {
-    this.ctx.lineTo(pos.x * this.width, pos.y * this.height);
+    this.ctx.lineTo(pos.x, pos.y);
     this.ctx.stroke();
     send({"canvas": ["lineTo", pos]});
   },
   moveTo: function(pos) {
-    this.ctx.moveTo(pos.x * this.width, pos.y * this.height);
+    this.ctx.moveTo(pos.x, pos.y);
     send({"canvas": ["moveTo", pos]});
   },
   setColor: function(color) {
@@ -59,8 +60,8 @@ window.onload = function() {
 
   $('#canvasframe').mousedown(function(evt) {
     var offset = $(this).offset();
-    var x = (evt.clientX - offset.left) / width;
-    var y = (evt.clientY - offset.top) / height;
+    var x = evt.clientX - offset.left;
+    var y = evt.clientY - offset.top;
     mouse = {x: x, y: y}
     canvas.beginPath();
     canvas.moveTo(mouse);
@@ -69,8 +70,8 @@ window.onload = function() {
   $('#canvasframe').mousemove(function(evt) {
     if (mouse) {
       var offset = $(this).offset();
-      var x = (evt.clientX - offset.left) / width;
-      var y = (evt.clientY - offset.top) / height;
+      var x = evt.clientX - offset.left;
+      var y = evt.clientY - offset.top;
       mouse = {x: x, y: y}
       canvas.lineTo(mouse);
     }

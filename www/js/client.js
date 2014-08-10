@@ -2,8 +2,8 @@ var ws, autoconnect = false;
 var host = "192.168.0.4"; // The host is the name or IP address of the server.
 
 var canvas = {
-  width: 800,
-  height: 600,
+  width: 2000,
+  height: 2000,
   ctx: null,
 
   init: function() {
@@ -11,6 +11,7 @@ var canvas = {
     this.ctx.canvas.width = this.width;
     this.ctx.canvas.height = this.height;
     this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = "round";
     this.setColor('black');
   },
   clear: function() {
@@ -20,11 +21,11 @@ var canvas = {
     this.ctx.beginPath();
   },
   lineTo: function(pos) {
-    this.ctx.lineTo(pos.x * this.width, pos.y * this.height);
+    this.ctx.lineTo(pos.x, pos.y);
     this.ctx.stroke();
   },
   moveTo: function(pos) {
-    this.ctx.moveTo(pos.x * this.width, pos.y * this.height);
+    this.ctx.moveTo(pos.x, pos.y);
   },
   setColor: function(color) {
     this.ctx.strokeStyle = color;

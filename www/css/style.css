@@ -150,9 +150,13 @@ body {
 /*
   display: none;
 */
+/*
   width: 100%;
   height: 100%;
+*/
   background: white;
+  cursor: crosshair;
+  margin-top: -100
 }
 
 
