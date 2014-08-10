@@ -159,7 +159,7 @@ function updateFrame(data) {
 }
 
 function send(data) {
-  if (ws) {
+  if (ws && ws.readyState == 1) {
     ws.send(JSON.stringify(data));
   }
 }
@@ -178,7 +178,7 @@ function connect() {
   ws = new WebSocket("ws://" + host + ":8888/remote");
 
   ws.onmessage = function(evt) {
-    console.log(evt.data);
+    //~ console.log(evt.data);
   };
 
   ws.onclose = function(evt) {
