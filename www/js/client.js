@@ -1,5 +1,4 @@
 var ws, autoconnect = false;
-var host = "192.168.0.4"; // The host is the name or IP address of the server.
 
 var canvas = {
   width: 2000,
@@ -42,6 +41,7 @@ window.onload = function() {
 }
 
 function connect() {
+  host = $("#host").val();
   ws = new WebSocket("ws://" + host + ":8888/client");
   ws.onmessage = function(evt) {
     var data = JSON.parse(evt.data);
