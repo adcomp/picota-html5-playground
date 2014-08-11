@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-# PICOTA - Simple HTTP server
+# PICOTA - WebSocket server
 # David Art [aka] ADcomp
 
 import sys

@@ -128,6 +128,8 @@ window.onload = function() {
       $('#mode').text('Editor');
     } else if (mode == "canvas") {
       $('#editor').hide();
+      $('#preview').hide();
+      preview = false;
       $('#nav-editor').hide();
       $('#canvasframe').show();
       $('#nav-canvas').show();
