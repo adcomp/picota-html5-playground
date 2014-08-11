@@ -1,11 +1,11 @@
 var ws = null, code_html, code_css, code_js;
 var width = 0, height = 0, preview = false, mode = "editor";
-var mouse = 0;
 
 var canvas = {
   width: 2000,
   height: 2000,
   ctx: null,
+  penDown: false,
 
   init: function() {
     this.ctx = document.getElementById('canvasframe').getContext("2d");
@@ -14,30 +14,39 @@ var canvas = {
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = "round";
     this.setColor('black');
+    this.lineWidth(1);
   },
+
   clear: function() {
     this.ctx.clearRect(0, 0, this.width, this.height);
     send({"canvas": ["clear", ""]});
   },
-  beginPath: function() {
-    this.ctx.beginPath();
-    send({"canvas": ["beginPath", ""]});
-  },
-  lineTo: function(pos) {
+
+  paint: function(pos) {
     this.ctx.lineTo(pos.x, pos.y);
     this.ctx.stroke();
-    send({"canvas": ["lineTo", pos]});
+    this.ctx.beginPath();
+    this.ctx.arc(pos.x, pos.y, this.thickness, 0, Math.PI*2);
+    this.ctx.fill();
+    this.ctx.beginPath();
+    this.ctx.moveTo(pos.x, pos.y);
+    send({"canvas": ["paint", pos]});
   },
+
   moveTo: function(pos) {
     this.ctx.moveTo(pos.x, pos.y);
     send({"canvas": ["moveTo", pos]});
   },
+
   setColor: function(color) {
     this.ctx.strokeStyle = color;
+    this.ctx.fillStyle = color;
     send({"canvas": ["setColor", color]});
   },
+
   lineWidth: function(width) {
-    this.ctx.lineWidth = width;
+    this.thickness = width;
+    this.ctx.lineWidth = width * 2;
     send({"canvas": ["lineWidth", width]});
   }
 }
@@ -62,23 +71,21 @@ window.onload = function() {
     var offset = $(this).offset();
     var x = evt.clientX - offset.left;
     var y = evt.clientY - offset.top;
-    mouse = {x: x, y: y}
-    canvas.beginPath();
-    canvas.moveTo(mouse);
+    canvas.moveTo({x: x, y: y});
+    canvas.penDown = true
   });
 
   $('#canvasframe').mousemove(function(evt) {
-    if (mouse) {
+    if (canvas.penDown) {
       var offset = $(this).offset();
       var x = evt.clientX - offset.left;
       var y = evt.clientY - offset.top;
-      mouse = {x: x, y: y}
-      canvas.lineTo(mouse);
+      canvas.paint({x: x, y: y});
     }
   });
 
   $('#canvasframe').mouseup(function(evt) {
-    mouse = 0;
+    canvas.penDown = false;
   });
 
   $('#nav-editor li').click(function() {

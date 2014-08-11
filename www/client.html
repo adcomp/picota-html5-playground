@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
   <title>Picota</title>
@@ -8,22 +8,23 @@
   <script src="js/jquery.min.js"></script>
   <script src="js/client.js"></script>
   <link href="css/style.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="images/favicon.png" />
 </head>
 <body>
 <div class="main">
-<header class="main-header">
-  <div class="header-left">
-    <h1 class="logo"><a href="#"></a></h1>
+  <header class="main-header">
+    <div class="header-left">
+      <h1 class="logo"><a href="#"></a></h1>
+    </div>
+  </header>
+  <div id="connect-box">
+    <span id="status"></span>
+    <label for="host">Host</label><input type="text" id="host" value="127.0.0.1">
+    <input type="button" id="connect" value="log in">
   </div>
-</header>
-<div id="connect-box">
-  <span id="status"></span>
-  <label for="host">Host</label><input type="text" id="host" value="127.0.0.1">
-  <input type="button" id="connect" value="log in">
-</div>
 
-<iframe id="mainframe"></iframe>
-<canvas id="canvasframe" style="display:none;"></canvas>
+  <iframe id="mainframe"></iframe>
+  <canvas id="canvasframe" style="display:none;"></canvas>
 </div><!-- main -->
 </body>
 </html>
