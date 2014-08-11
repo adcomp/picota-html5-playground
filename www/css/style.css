@@ -133,7 +133,7 @@ body {
   }
 
 #canvasframe {
-  background: white;
+  background: white url('../images/canvas.png');
   cursor: crosshair;
 }
 

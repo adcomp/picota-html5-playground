@@ -3,19 +3,24 @@ var canvas = {
   height: 2000,
   ctx: null,
   penDown: false,
+  showGrid: true,
 
   init: function() {
     this.ctx = document.getElementById('canvasframe').getContext("2d");
-    this.ctx.canvas.width = this.width;
-    this.ctx.canvas.height = this.height;
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = "round";
     this.setColor('black');
     this.lineWidth(1);
+    this.clear();
   },
 
   clear: function() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.canvas.width = this.width;
+    this.ctx.canvas.height = this.height;
+    if (!this.showGrid) {
+      this.ctx.fillStyle = "white";
+      this.ctx.fillRect(0 ,0 , this.width, this.height);
+    }
   },
 
   paint: function(pos) {
