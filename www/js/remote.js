@@ -1,57 +1,6 @@
 var ws = null, code_html, code_css, code_js;
 var width = 0, height = 0, preview = false, mode = "editor";
 
-var canvas = {
-  width: 2000,
-  height: 2000,
-  ctx: null,
-  penDown: false,
-
-  init: function() {
-    this.ctx = document.getElementById('canvasframe').getContext("2d");
-    this.ctx.canvas.width = this.width;
-    this.ctx.canvas.height = this.height;
-    this.ctx.lineCap = 'round';
-    this.ctx.lineJoin = "round";
-    this.setColor('black');
-    this.lineWidth(1);
-  },
-
-  clear: function() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
-    send({"canvas": ["clear", ""]});
-  },
-
-  paint: function(pos) {
-    this.ctx.lineTo(pos.x, pos.y);
-    this.ctx.stroke();
-    this.ctx.beginPath();
-    this.ctx.arc(pos.x, pos.y, this.thickness, 0, Math.PI*2);
-    this.ctx.fill();
-    this.ctx.beginPath();
-    this.ctx.moveTo(pos.x, pos.y);
-    send({"canvas": ["paint", pos]});
-  },
-
-  moveTo: function(pos) {
-    this.ctx.moveTo(pos.x, pos.y);
-    send({"canvas": ["moveTo", pos]});
-  },
-
-  setColor: function(color) {
-    this.ctx.strokeStyle = color;
-    this.ctx.fillStyle = color;
-    send({"canvas": ["setColor", color]});
-  },
-
-  lineWidth: function(width) {
-    this.thickness = width;
-    this.ctx.lineWidth = width * 2;
-    send({"canvas": ["lineWidth", width]});
-  }
-}
-
-
 window.onload = function() {
   canvas.init();
   resizeEditor();
@@ -63,24 +12,44 @@ window.onload = function() {
   $(window).resize(resizeEditor);
 
   $('#connect').click(function() { connect(); });
-  $('#canvas-clear').click(function() { canvas.clear(); });
-  $('#canvas-color').change(function() { canvas.setColor($(this).val()); });
-  $('#canvas-lineWidth').change(function() { canvas.lineWidth($(this).val()); });
+
+  $('#canvas-clear').click(function() {
+    canvas.clear();
+    send({"canvas": ["clear", ""]});
+  });
+
+  $('#canvas-color').change(function() {
+    var color = $(this).val();
+    canvas.setColor(color);
+    send({"canvas": ["setColor", color]});
+  });
+
+  $('#canvas-lineWidth').change(function() {
+    var width = $(this).val();
+    canvas.lineWidth(width);
+    send({"canvas": ["lineWidth", width]});
+  });
 
   $('#canvasframe').mousedown(function(evt) {
     var offset = $(this).offset();
-    var x = evt.clientX - offset.left;
-    var y = evt.clientY - offset.top;
-    canvas.moveTo({x: x, y: y});
+    var pos = {
+      x: evt.clientX - offset.left,
+      y: evt.clientY - offset.top
+    }
+    canvas.moveTo(pos);
+    send({"canvas": ["moveTo", pos]});
     canvas.penDown = true
   });
 
   $('#canvasframe').mousemove(function(evt) {
     if (canvas.penDown) {
       var offset = $(this).offset();
-      var x = evt.clientX - offset.left;
-      var y = evt.clientY - offset.top;
-      canvas.paint({x: x, y: y});
+      var pos = {
+        x: evt.clientX - offset.left,
+        y: evt.clientY - offset.top
+      }
+      canvas.paint(pos);
+      send({"canvas": ["paint", pos]});
     }
   });
 
@@ -90,10 +59,10 @@ window.onload = function() {
 
   $('#nav-editor li').click(function() {
     // attribute name is the key ..
-    str = $(this).attr('name');
+    var str = $(this).attr('name');
 
     if (str == "refresh") {
-      data = "<html><head>";
+      var data = "<html><head>";
       data += "<style>" + code_css.getValue() + "</style>";
       data += "</head><body>";
       data += code_html.getValue();
@@ -126,7 +95,7 @@ window.onload = function() {
 
   $('.select-mode li').click(function() {
     // attribute name is the key ..
-    mode = $(this).attr('name');
+    var mode = $(this).attr('name');
     if (mode == "editor") {
       $('#canvasframe').hide();
       $('#nav-canvas').hide();
