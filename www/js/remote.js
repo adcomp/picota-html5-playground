@@ -136,17 +136,17 @@ window.onload = function() {
       $('#mode').text('Canvas');
     }
     send({mode: mode});
-
   });
 
+  // HTML code
   code_html = ace.edit("code_html");
   code_html.setTheme("ace/theme/twilight");
   code_html.getSession().setMode("ace/mode/html");
-
+  // CSS code
   code_css = ace.edit("code_css");
   code_css.setTheme("ace/theme/twilight");
   code_css.getSession().setMode("ace/mode/css");
-
+  // JS code
   code_js = ace.edit("code_js");
   code_js.setTheme("ace/theme/twilight");
   code_js.getSession().setMode("ace/mode/javascript");
@@ -201,13 +201,12 @@ function connect() {
 function resizeEditor() {
   width = window.innerWidth;
   height = window.innerHeight;
-  $('.code').height(height-96);
-  $('#preview').height(height-96);
+  $('.code').height(height-86);
+  $('#preview').height(height-86);
   if (preview) {
     $('.code').width(width/2-8);
     $('#preview').width(width/2-8);
   } else {
     $('.code').width(width-4);
-    //~ $('#preview').width(width/2-8);
   }
 }

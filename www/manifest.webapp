@@ -1,0 +1,17 @@
+{
+    "version": "0.1",
+    "name": "Picota",
+    "launch_path": "/index.html",
+    "description": "HTML5 Code Editor & Canvas Drawing wtih WebSocket.",
+    "icons": {
+        "128": "/images/picota-icon.png"
+    },
+    "developer": {
+        "name": "David Art [aka] ADcomp",
+        "url": "https://www.google.com/+DavidArt"
+    },
+    "installs_allowed_from": ["*"],
+    "default_locale": "en",
+    "permissions": {
+    }
+}

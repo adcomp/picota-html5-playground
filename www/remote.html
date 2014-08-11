@@ -2,21 +2,22 @@
 <html>
 <head>
   <title>Picota</title>
+  <meta name="author" content="David Art [aka] ADcomp" >
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width">
-  <script src="ace/ace.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-  <script src="js/remote.js" type="text/javascript" charset="utf-8"></script>
-  <link rel="stylesheet" href="css/style.css">
+  <script src="ace/ace.js"></script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/remote.js"></script>
+  <link href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
 
-<div id="main" class="main-remote">
+<div class="main main-remote">
 
 <header class="main-header">
   <div class="header-left">
-    <h1 class="logo"><a href=""></a></h1>
+    <h1 class="logo"><a href="#"></a></h1>
 
     <nav id="nav-mode">
       <ul class="menu">
@@ -28,6 +29,7 @@
         </li>
       </ul>
     </nav>
+
     <nav id="nav-editor">
       <ul class="menu">
         <li name="html" class="active">HTML</li>
@@ -38,7 +40,8 @@
         <li name="connect"><img src="images/network.png"></li>
       </ul>
     </nav>
-    <nav id="nav-canvas">
+
+    <nav id="nav-canvas" style="display:none;">
       <ul class="menu">
         <li><input id="canvas-color" type="color" value="#000000"></li>
         <li>Size
@@ -48,7 +51,6 @@
             </li>
           </ul>
         </li>
-
         <li id="canvas-clear" name="clear">Clear</li>
       </ul>
     </nav>
@@ -56,7 +58,7 @@
 
 </header>
 
-<div id="connect-box">
+<div id="connect-box" style="display:none;">
   <span id="status"></span>
   <label for="host">Host</label><input type="text" id="host" value="127.0.0.1">
   <input type="button" id="connect" value="log in">
@@ -64,17 +66,15 @@
 
 <div id="editor">
   <div id="code_html" class="code"></div>
-  <div id="code_css" class="code"></div>
-  <div id="code_js" class="code"></div>
+  <div id="code_css" class="code" style="display:none;"></div>
+  <div id="code_js" class="code" style="display:none;"></div>
+  <div id="preview"><iframe id="mainframe"></iframe></div>
 </div>
 
-<div id="preview"><iframe id="mainframe"></iframe></div>
-
-<canvas id="canvasframe"></canvas>
-
-</div><!-- main -->
+<canvas id="canvasframe" style="display:none;"></canvas>
 
 <footer class="main-footer">ADcomp</footer>
+</div><!-- main -->
 
 </body>
 </html>
