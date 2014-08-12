@@ -18,14 +18,25 @@
       <h1 class="logo"><a href="#"></a></h1>
     </div>
   </header>
-  <div id="connect-box">
-    <span id="status"></span>
-    <label for="host">Host</label><input type="text" id="host" value="127.0.0.1">
-    <input type="button" id="connect" value="log in">
-  </div>
 
-  <iframe id="mainframe"></iframe>
-  <canvas id="canvasframe" style="display:none;"></canvas>
+<div id="connect-box">
+  <h2>Connection Remote</h2>
+  <ul>
+    <li id="status" class="not-connected">not connected</li>
+    <li>
+      <label for="host">Host</label>
+    </li>
+    <li>
+      <input type="text" id="host" value="127.0.0.1">
+    </li>
+    <li>
+      <input type="button" id="connect" value="Connect">
+    </li>
+  </ul>
+</div>
+
+  <iframe id="mainframe" src="about:blank"></iframe>
+  <canvas id="canvas" style="display:none;"></canvas>
 </div><!-- main -->
 </body>
 </html>

@@ -6,7 +6,7 @@ var canvas = {
   showGrid: true,
 
   init: function() {
-    this.ctx = document.getElementById('canvasframe').getContext("2d");
+    this.ctx = document.getElementById('canvas').getContext("2d");
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = "round";
     this.setColor('black');

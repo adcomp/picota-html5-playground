@@ -48,7 +48,7 @@
         <li>Size
           <ul>
             <li>
-              <input id="canvas-lineWidth" type="range" min="1" max="32" value="1">
+              <input id="canvas-lineWidth" type="range" min="1" max="64" value="1">
             </li>
           </ul>
         </li>
@@ -69,22 +69,50 @@
 
 </header>
 
-<div id="connect-box" style="display:none;">
-  <span id="status"></span>
-  <label for="host">Host</label><input type="text" id="host" value="127.0.0.1">
-  <input type="button" id="connect" value="log in">
+<aside class="toolbar">
+  <nav>
+  <ul>
+    <li>a</li>
+    <li>b</li>
+    <li>c</li>
+    <li>d</li>
+  </ul>
+  </nav>
+</aside>
+
+<div id="connect-box">
+  <h2>Connection Remote</h2>
+  <ul>
+    <li id="status" class="not-connected">not connected</li>
+    <li>
+      <label for="host">Host</label>
+    </li>
+    <li>
+      <input type="text" id="host" value="127.0.0.1">
+    </li>
+    <li>
+      <input type="button" id="connect" value="Connect">
+    </li>
+  </ul>
 </div>
 
 <div id="editor">
   <div id="code_html" class="code"></div>
-  <div id="code_css" class="code" style="display:none;"></div>
-  <div id="code_js" class="code" style="display:none;"></div>
-  <div id="preview"><iframe id="mainframe"></iframe></div>
+  <div id="code_css" class="code"></div>
+  <div id="code_js" class="code"></div>
+  <div id="preview"><iframe id="mainframe" src="about:blank"></iframe></div>
 </div>
 
-<canvas id="canvasframe" style="display:none;"></canvas>
+<canvas id="canvas" style="display:none;"></canvas>
 
-<footer class="main-footer">ADcomp</footer>
+<footer class="main-footer">
+  <ul>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Doc</a></li>
+    <li><a href="#">@adcomp77</a></li>
+  </ul>
+</footer>
+
 </div><!-- main -->
 
 </body>

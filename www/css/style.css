@@ -4,6 +4,12 @@ body {
   font-family: "Lucida Grande","Lucida Sans Unicode",Tahoma,sans-serif;
 }
 
+ol, ul {
+  list-style: none outside none;
+  padding: 0; margin: 0;
+}
+
+
 .main {
   margin: 0; padding: 0;
   box-sizing: border-box;
@@ -17,7 +23,10 @@ body {
 }
 
 #preview {
+  position: absolute;
   float: right;
+  top: 50px;
+  right: 0;
   display: none;
   vertical-align: top;
   background-color: white;
@@ -30,18 +39,22 @@ body {
   border: 0px none;
 }
 
+#code_css, #code_js {
+  display: none;
+}
+
 .code {
   font-size: 1.2em;
   display: inline-block;
 }
+
 
 #update {
   display: none;
 }
 
 .active {
-  color: #fff;
-  background-color: #393939;
+  background-color: #262626;
 }
 
 .main-header {
@@ -49,21 +62,7 @@ body {
   position: relative;
   background: #000;
   background: linear-gradient(#222, #000) repeat scroll 0% 0% transparent;
-  border-bottom: 2px solid #3D3D3D;
-}
-
-.main-footer {
-  position: fixed;
-  bottom: 0; left: 0; right: 0;
-  padding: 0px 10px;
-  height: 30px;
-  line-height: 2em;
-  color: #ccc;
-  background: #000;
-  background: linear-gradient(#222, #000) repeat scroll 0% 0% transparent;
-  border-top: 2px solid #3D3D3D;
-  text-align: right;
-  font-size: 0.8em;
+  border-bottom: 2px solid #262626;
 }
 
 .logo {
@@ -75,8 +74,9 @@ body {
 
 .logo a {
   font: 0px/0 a;
-  background-image: url('../images/picota.png');
-  width: 200px;
+  background: url('../images/picota.png');
+  background-repeat: no-repeat;
+  width: 48px;
   height: 48px;
   display: block;
   border: 0px none;
@@ -96,48 +96,151 @@ body {
   white-space: nowrap;
 }
 
+/*
+ connect-box
+*/
+
 #connect-box {
+  display: none;
   position: absolute;
-  top: 50px;
+  top: 49px;
   right: 0;
-  height: 48px;
-  line-height: 48px;
-  border-bottom: 1px solid #232323;
+  width: 320px;
+  border: 1px solid #262626;
   background-color: #1B1B1B;
   color: white;
-  padding: 8px 8px;
+  padding: 8px 16px;
   z-index: 100;
-  text-align: right;
+  text-align: left;
   vertical-align: middle;
+  font-size: 0.9em;
+}
+
+#connect-box h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 1em;
+  border-bottom: 1px solid #111;
+}
+
+#connect-box li {
+  margin: 6px 0;
+  padding: 0;
+  border: O none;
 }
 
 #host {
-  margin: 0 8px;
-  font-size: 1.2em;
-  width: 240px;
+  padding: 0;
+  margin: 0;
+  width: 315px;
+  height: 28px;
   text-align: center;
+  border: O none;
 }
 
 #connect {
-  width: 64px;
-  font-size: 1.2em;
+  width: 320px;
+  height: 32px;
+  box-sizing: border-box;
 }
 
-.connect-error {
-  border: 1px solid red;
-}
-
-#status {
-  margin: 24px;
+.not-connected {
   color: red;
-  }
+}
 
-#canvasframe {
+.connected {
+  color: green;
+}
+
+.status {
+  color: red;
+}
+
+#canvas {
   background: white url('../images/canvas.png');
   cursor: crosshair;
 }
 
+/*
+  toolbar
+*/
 
+.toolbar {
+  color: #ccc;
+  background: #111;
+  border-right: 2px solid #262626;
+  top: 48px;
+  bottom: 30px;
+  left: 0;
+  position: absolute;
+  width: 48px;
+  z-index: 300;
+}
+
+.toolbar ul {
+  margin: 0;
+  padding: 0;
+}
+
+.toolbar li {
+  margin: 0;
+  padding: 0;
+  float: left;
+  height: 48px;
+  width: 48px;
+  border-bottom: 1px solid #222;
+  text-align: center;
+  line-height: 48px;
+}
+
+/*
+  footer
+*/
+
+.main-footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 0;
+  height: 30px;
+  line-height: 2em;
+  color: #ccc;
+  background: #000;
+  background: linear-gradient(#222, #000) repeat scroll 0% 0% transparent;
+  border-top: 2px solid #262626;
+  text-align: right;
+  font-size: 0.8em;
+  z-index: 100;
+}
+
+.main-footer ul {
+  list-style: none outside none;
+  margin: 0;
+  line-height: 30px;
+}
+
+.main-footer li {
+  display: inline-block;
+  margin: 0 10px;
+}
+
+a {
+  color: #999;
+  text-decoration: none;
+  border: 0px none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/*
+  Editor
+*/
+
+#editor {
+  display: inline-block;
+  margin-left: 48px;
+}
 
 /*
   MENU
@@ -145,7 +248,7 @@ body {
 nav {
   display: inline-block;
   vertical-align: top;
-  font-size: 1.3em;
+  font-size: 1em;
   font-weight: bold;
   color: white;
 }
@@ -153,6 +256,9 @@ nav {
 nav ul ul {
   display: none;
   z-index: 200;
+    background: #000;
+    background: linear-gradient(#222, #000) repeat scroll 0% 0% transparent;
+
 }
 
   nav ul li:hover > ul {
@@ -160,7 +266,6 @@ nav ul ul {
   }
 
 nav ul {
-  padding: 0; margin: 0;
   border-radius: 0;
   list-style: none;
   position: relative;
@@ -172,9 +277,8 @@ nav ul {
   }
 
   nav ul li {
-    background: #080808;
     float: left;
-    width: 96px;
+    width: 76px;
     height: 48px;
     text-align: center;
     vertical-align: middle;
@@ -183,7 +287,7 @@ nav ul {
   }
 
   nav ul li:hover {
-    background: #4C4C4C;
+    background: #333333;
   }
 
 #canvas-color {

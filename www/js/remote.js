@@ -1,15 +1,46 @@
-var ws = null, code_html, code_css, code_js;
-var width = 0, height = 0, preview = false, mode = "editor";
+var ws = null,
+    code_html,
+    code_css,
+    code_js,
+    preview = false,
+    mode = "editor",
+    code = "html",
+    editor_code = {};
+
 
 window.onload = function() {
   canvas.init();
   resizeEditor();
-
   $('#code_html').show();
-  $('#nav-canvas').hide();
-  $('#canvasframe').hide();
 
+  // Events
   $(window).resize(resizeEditor);
+
+  $(window).keydown(function(evt) {
+    if (evt.ctrlKey) {
+      if (evt.keyCode == 13) {
+        // Ctrl + Enter : refresh frame
+        refreshFrame();
+      } else if (evt.keyCode == 49) {
+        // Ctrl +  1 : show HTML code
+        showCode('html');
+      } else if (evt.keyCode == 50) {
+        // Ctrl +  2 : show CSS code
+        showCode('css');
+      } else if (evt.keyCode == 51) {
+        // Ctrl + 3 : show JS code
+        showCode('js');
+      } else if (evt.keyCode == 52) {
+        // Ctrl + 4 : toggle preview
+        togglePreview();
+      } else if (evt.keyCode == 53) {
+        // Ctrl + 5 : show Canvas
+        selectMode('canvas');
+      } else {
+        console.log(evt.keyCode)
+      }
+    }
+  });
 
   $('#connect').click(function() { connect(); });
 
@@ -30,18 +61,20 @@ window.onload = function() {
     send({"canvas": ["lineWidth", width]});
   });
 
-  $('#canvasframe').mousedown(function(evt) {
+  $('#canvas').mousedown(function(evt) {
     var offset = $(this).offset();
     var pos = {
       x: evt.clientX - offset.left,
       y: evt.clientY - offset.top
     }
     canvas.moveTo(pos);
+    canvas.paint(pos);
     send({"canvas": ["moveTo", pos]});
+    send({"canvas": ["paint", pos]});
     canvas.penDown = true
   });
 
-  $('#canvasframe').mousemove(function(evt) {
+  $('#canvas').mousemove(function(evt) {
     if (canvas.penDown) {
       var offset = $(this).offset();
       var pos = {
@@ -53,87 +86,99 @@ window.onload = function() {
     }
   });
 
-  $('#canvasframe').mouseup(function(evt) {
+  $('#canvas').mouseup(function(evt) {
     canvas.penDown = false;
   });
 
-  $('#nav-editor li').click(function() {
+  $('nav li').click(function() {
     // attribute name is the key ..
-    var str = $(this).attr('name');
+    var name = $(this).attr('name');
 
-    if (str == "refresh") {
-      var data = "<html><head>";
-      data += "<style>" + code_css.getValue() + "</style>";
-      data += "</head><body>";
-      data += code_html.getValue();
-      data += "<script>" + code_js.getValue() + "<\/script>";
-      data += "</body></html>";
+    if (name == "refresh") {
+      refreshFrame();
 
-      // send to server if connected
-      if (ws) {
-        ws.send(JSON.stringify({"html": data}));
-      }
-      // update <iframe> with new HTML
-      updateFrame(data);
-
-    } else if (str == "connect") {
-      //
+    } else if (name == "connect") {
       $('#connect-box').slideToggle();
 
-    } else if (str == "preview") {
-      //
+    } else if (name == "preview") {
         togglePreview();
-        resizeEditor();
 
-    } else {
-      $('.code').hide();
-      $('#code_'+str).toggle();
-      $('.active').removeClass('active');
-      $('#nav-editor li[name='+str+']').addClass('active');
+    } else if (name == "editor" || name == "canvas") {
+      selectMode(name);
+
+    } else if (name == 'html' || name == "css" || name == "js") {
+      showCode(name);
     }
-  });
 
-  $('.select-mode li').click(function() {
-    // attribute name is the key ..
-    var mode = $(this).attr('name');
     if (mode == "editor") {
-      $('#canvasframe').hide();
-      $('#nav-canvas').hide();
-      $('#editor').show();
-      $('#nav-editor').show();
-      $('#mode').text('Editor');
-    } else if (mode == "canvas") {
-      $('#editor').hide();
-      $('#preview').hide();
-      preview = false;
-      $('#nav-editor').hide();
-      $('#canvasframe').show();
-      $('#nav-canvas').show();
-      $('#mode').text('Canvas');
+      editor_code[code].focus();
     }
-    send({mode: mode});
   });
 
   // HTML code
   code_html = ace.edit("code_html");
-  code_html.setTheme("ace/theme/twilight");
+  //~ code_html.setTheme("ace/theme/textmate");
   code_html.getSession().setMode("ace/mode/html");
+
   // CSS code
   code_css = ace.edit("code_css");
-  code_css.setTheme("ace/theme/twilight");
+  //~ code_css.setTheme("ace/theme/twilight");
   code_css.getSession().setMode("ace/mode/css");
+
   // JS code
   code_js = ace.edit("code_js");
-  code_js.setTheme("ace/theme/twilight");
+  //~ code_js.setTheme("ace/theme/twilight");
   code_js.getSession().setMode("ace/mode/javascript");
+
+  editor_code = {"html": code_html, "css": code_css, "js": code_js};
+
 }
 
-function updateFrame(data) {
+function refreshFrame(data) {
   var previewFrame = document.getElementById('mainframe');
   var preview = previewFrame.contentDocument || previewFrame.contentWindow.document;
-  preview.open();
+
+  var data = "<html><head><style>" + code_css.getValue() + "</style>";
+  data += "</head><body>" + code_html.getValue();
+  data += "<script>" + code_js.getValue() + "<\/script></body></html>";
+
+  preview.open('text/html', 'replace');
   preview.write(data);
   preview.close();
+
+  // send to server if connected
+  if (ws) {
+    ws.send(JSON.stringify({"html": data}));
+  }
+}
+
+function showCode(name) {
+  if (mode != 'editor') {
+    selectMode('editor');
+  }
+  $('.code').hide();
+  $('#code_' + name).toggle();
+  editor_code[name].focus();
+  $('.active').removeClass('active');
+  $('#nav-editor li[name=' + name + ']').addClass('active');
+  code = name;
+}
+
+function selectMode(name) {
+  if (name == "editor") {
+    $('#canvas').hide();
+    $('#nav-canvas').hide();
+    $('#editor').show();
+    $('#nav-editor').show();
+  } else if (name == "canvas") {
+    $('#editor').hide();
+    $('#nav-editor').hide();
+    $('#canvas').show();
+    $('#nav-canvas').show();
+  }
+  $('#mode').text(name);
+  send({mode: name});
+  mode = name;
 }
 
 function send(data) {
@@ -149,6 +194,7 @@ function togglePreview() {
     $('#preview').show();
   }
   preview = !preview;
+  resizeEditor();
 }
 
 function connect() {
@@ -162,14 +208,16 @@ function connect() {
   ws.onclose = function(evt) {
     console.log("WebSocket close ..");
     $('#connect-box').slideDown();
-    $('#connect-box').addClass('connect-error');
+    $('#status').removeClass('connected');
+    $('#status').addClass('not-connected');
     $('#status').text("can't establish a connection to the server");
   };
 
   ws.onopen = function(evt) {
     console.log("WebSocket open ..")
-    $('#status').text("");
-    $('#connect-box').removeClass('connect-error');
+    $('#status').text("connected");
+    $('#status').removeClass('not-connected');
+    $('#status').addClass('connected');
     $('#connect-box').slideUp();
   };
 }
@@ -177,12 +225,12 @@ function connect() {
 function resizeEditor() {
   width = window.innerWidth;
   height = window.innerHeight;
-  $('.code').height(height-86);
-  $('#preview').height(height-86);
+  $('.code').height(height-82);
+  $('#preview').height(height-82);
   if (preview) {
     $('.code').width(width/2-8);
-    $('#preview').width(width/2-8);
+    $('#preview').width(width/2-8 -48);
   } else {
-    $('.code').width(width-4);
+    $('.code').width(width-4 -48);
   }
 }

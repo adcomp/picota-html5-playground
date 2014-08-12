@@ -3,7 +3,11 @@ var ws, autoconnect = false;
 window.onload = function() {
   canvas.init();
   $('#connect').click(function() { connect(); });
-  if (autoconnect) { connect(); }
+  if (autoconnect) {
+    connect();
+  } else {
+    $("#connect-box").slideDown();
+  }
 }
 
 function connect() {
@@ -15,25 +19,19 @@ function connect() {
     for (var key in data) {
 
       if (key == 'eval') {
+        // don't be evil ..
         eval(data[key]);
 
       } else if (key == 'mode') {
-        if (data[key] == 'editor') {
-          $('#canvasframe').hide();
-          $('#mainframe').show();
-        } else if (data[key] == 'canvas') {
-          $('#mainframe').hide();
-          $('#canvasframe').show();
-        }
+        selectMode(data[key])
 
       } else if (key == 'html') {
         updateFrame(data[key])
 
       } else if (key == 'canvas') {
-        cmd = data[key][0];
-        obj = data[key][1];
-        //~ console.log(cmd, obj);
-        canvas[cmd](obj);
+        fct = data[key][0];
+        val = data[key][1];
+        canvas[fct](val);
 
       } else {
         // what to do ?
@@ -44,20 +42,17 @@ function connect() {
 
   ws.onclose = function(evt) {
     console.log("WebSocket close ..");
-    $('#connect-box').slideDown();
-    $('#connect-box').addClass('connect-error');
+    $('.main-header').show();
+    $('#connect-box').show();
+    $('#status').removeClass('connected');
+    $('#status').addClass('not-connected');
     $('#status').text("can't establish a connection to the server");
   };
 
   ws.onopen = function(evt) {
     console.log("WebSocket open ..")
-    $('#status').text("");
-    $('#connect-box').removeClass('connect-error');
-    $('#connect-box').slideUp();
-  };
-
-  ws.onerror = function(evt) {
-    console.log("WebSocket error ..")
+    $('.main-header').hide();
+    $('#connect-box').hide();
   };
 }
 
@@ -67,4 +62,14 @@ function updateFrame(data) {
   preview.open();
   preview.write(data);
   preview.close();
+}
+
+function selectMode(name) {
+  if (name == 'editor') {
+    $('#canvas').hide();
+    $('#mainframe').show();
+  } else if (name == 'canvas') {
+    $('#mainframe').hide();
+    $('#canvas').show();
+  }
 }
