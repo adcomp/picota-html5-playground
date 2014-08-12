@@ -218,7 +218,7 @@ function connect() {
     $('#status').text("connected");
     $('#status').removeClass('not-connected');
     $('#status').addClass('connected');
-    $('#connect-box').slideUp();
+    //~ $('#connect-box').slideUp();
   };
 }
 
